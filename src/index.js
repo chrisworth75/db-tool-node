@@ -2,6 +2,7 @@ import { parseArgs } from "./utils/args.js";
 import { getAllPaymentDataByCCD, getAllPaymentDataByRC } from "./repositories/paymentsRepo.js";
 import { getAllRefundDataByCCD, getAllRefundDataByPaymentRef } from "./repositories/refundsRepo.js";
 import { mergeAllData } from "./services/mergeService.js";
+import { transformToCase } from "./services/caseTransformer.js";
 
 async function main() {
     const args = parseArgs();
@@ -86,9 +87,29 @@ async function main() {
             }
         }
 
-        // Merge and output results
-        const combined = mergeAllData(paymentData, refundData);
-        console.log(JSON.stringify(combined, null, 2));
+        // Transform to Case DTO
+        const caseData = transformToCase(paymentData, refundData);
+
+        // Output the case(s)
+        if (Array.isArray(caseData)) {
+            // Multiple cases found
+            console.log(JSON.stringify({
+                cases: caseData,
+                summary: {
+                    caseCount: caseData.length,
+                    caseSummaries: caseData.map(c => ({
+                        ccdCaseNumber: c.ccdCaseNumber,
+                        ...c.getSummary()
+                    }))
+                }
+            }, null, 2));
+        } else {
+            // Single case
+            console.log(JSON.stringify({
+                case: caseData,
+                summary: caseData.getSummary()
+            }, null, 2));
+        }
     } catch (error) {
         console.error("Error:", error);
         process.exit(1);
