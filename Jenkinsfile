@@ -66,18 +66,20 @@ pipeline {
 
                         # Check if databases are accessible
                         echo "Checking payments-db connectivity..."
-                        docker run --rm --network feepay_ccpay-local postgres:15-alpine \
-                            pg_isready -h payments-db -p 5432 -U postgres || {
-                            echo "❌ payments-db is not accessible"
-                            exit 1
-                        }
+                        if ! docker run --rm --network feepay_ccpay-local postgres:15-alpine \
+                            pg_isready -h payments-db -p 5432 -U postgres 2>/dev/null; then
+                            echo "⚠️  payments-db is not accessible - skipping integration tests"
+                            echo "ℹ️  To run integration tests, start databases with:"
+                            echo "    docker-compose -f ../dev-feepay/docker-compose.yml up -d payments-db refunds-db"
+                            exit 0
+                        fi
 
                         echo "Checking refunds-db connectivity..."
-                        docker run --rm --network feepay_ccpay-local postgres:15-alpine \
-                            pg_isready -h refunds-db -p 5432 -U postgres || {
-                            echo "❌ refunds-db is not accessible"
-                            exit 1
-                        }
+                        if ! docker run --rm --network feepay_ccpay-local postgres:15-alpine \
+                            pg_isready -h refunds-db -p 5432 -U postgres 2>/dev/null; then
+                            echo "⚠️  refunds-db is not accessible - skipping integration tests"
+                            exit 0
+                        fi
 
                         # Run the tool against live databases
                         echo "Testing db-tool-node against live databases..."
