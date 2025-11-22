@@ -45,8 +45,49 @@ Returns JSON with complete case data including fees, payments, refunds, remissio
 
 ## Testing
 
+### Unit Tests
+
 ```bash
 npm test
 ```
 
-100% code coverage required.
+Runs unit tests with 100% code coverage requirement.
+
+### End-to-End Tests
+
+```bash
+npm run test:e2e
+```
+
+Runs e2e tests that:
+1. Load test data into both databases
+2. Run the tool against the test data
+3. Verify output correctness
+4. Clean up test data
+
+See [test/e2e/README.md](test/e2e/README.md) for detailed documentation.
+
+### All Tests
+
+```bash
+npm run test:all
+```
+
+Runs both unit and e2e tests.
+
+### Manual Test Data Management
+
+Load test data:
+```bash
+npm run load-test-data
+```
+
+Clean test data:
+```bash
+npm run clean-test-data
+```
+
+Query the loaded test data:
+```bash
+node src/index.js --ccd 1234567890123456
+```

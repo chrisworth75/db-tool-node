@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathIgnorePatterns=e2e",
+    "test:e2e": "node --experimental-vm-modules node_modules/jest/bin/jest.js test/e2e",
+    "test:all": "npm test && npm run test:e2e",
+    "load-test-data": "node test/e2e/load-test-data.js load",
+    "clean-test-data": "node test/e2e/load-test-data.js clean"
   },
   "author": "",
   "license": "ISC",
@@ -23,7 +27,8 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/src/index.js",
-      "/src/repositories/"
+      "/src/repositories/",
+      "/test/e2e/"
     ],
     "coverageThreshold": {
       "global": {
