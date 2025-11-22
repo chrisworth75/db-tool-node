@@ -46,22 +46,10 @@ pipeline {
                 script {
                     def buildNumber = env.BUILD_NUMBER ?: 'latest'
                     sh """
+                        echo "Building Docker image for CLI tool..."
                         docker build -t ${IMAGE_NAME}:${buildNumber} .
                         docker tag ${IMAGE_NAME}:${buildNumber} ${IMAGE_NAME}:latest
-                    """
-                }
-            }
-        }
-
-        stage('Push to Local Registry') {
-            steps {
-                script {
-                    def buildNumber = env.BUILD_NUMBER ?: 'latest'
-                    sh """
-                        docker tag ${IMAGE_NAME}:${buildNumber} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${buildNumber}
-                        docker tag ${IMAGE_NAME}:${buildNumber} ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
-                        docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${buildNumber}
-                        docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
+                        echo "✅ Docker image built: ${IMAGE_NAME}:${buildNumber}"
                     """
                 }
             }
@@ -119,7 +107,7 @@ pipeline {
     post {
         success {
             echo '✅ db-tool-node pipeline completed successfully!'
-            echo "📦 Image pushed to ${DOCKER_REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER}"
+            echo "📦 Docker image available: ${IMAGE_NAME}:${env.BUILD_NUMBER}"
         }
         failure {
             echo '❌ db-tool-node pipeline failed!'
