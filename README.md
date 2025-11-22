@@ -50,3 +50,4 @@ npm test
 ```
 
 100% code coverage required.
+
