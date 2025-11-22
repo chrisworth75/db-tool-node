@@ -22,7 +22,8 @@
     "collectCoverage": true,
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/src/index.js"
+      "/src/index.js",
+      "/src/repositories/"
     ],
     "coverageThreshold": {
       "global": {

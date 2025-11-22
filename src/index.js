@@ -9,7 +9,8 @@ async function main() {
     const ccd = args.ccd;
 
     if (!ccd) {
-        console.error("Usage: node index.js --ccd <CCD_NUMBER>");
+        console.error("Usage: node src/index.js --ccd <CCD_NUMBER>");
+        console.error("Example: node src/index.js --ccd 1111111111111111");
         process.exit(1);
     }
 
