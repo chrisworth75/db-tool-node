@@ -69,7 +69,7 @@ pipeline {
 
         stage('Integration Tests') {
             when {
-                branch 'claude'
+                branch 'main'
             }
             steps {
                 script {
